@@ -9,6 +9,8 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@antv/x6": "^2.18.1",
+    "@antv/x6-react-shape": "^2.2.3",
     "antd": "^5.16.5",
     "axios": "^1.6.8",
     "monaco-editor": "^0.48.0",

@@ -7,6 +7,12 @@ settings:
 importers:
   .:
     dependencies:
+      '@antv/x6':
+        specifier: ^2.18.1
+        version: 2.18.1
+      '@antv/x6-react-shape':
+        specifier: ^2.2.3
+        version: 2.2.3(@antv/x6@2.18.1)(react-dom@18.1.0(react@18.1.0))(react@18.1.0)
       antd:
         specifier: ^5.16.5
         version: 5.16.5(moment@2.30.1)(react-dom@18.1.0(react@18.1.0))(react@18.1.0)
@@ -251,6 +257,34 @@ packages:
     resolution:
       {
         integrity: sha512-gFPqTG7otEJ8uP6wrhDv6mqwGWYZKNvAcCq6u9hOj0c+IKCEsY4L1oC9trPq2SaWIzAfHvqfBDxF591JkMf+kg==,
+      }
+
+  '@antv/x6-common@2.0.17':
+    resolution:
+      {
+        integrity: sha512-37g7vmRkNdYzZPdwjaMSZEGv/MMH0S4r70/Jwoab1mioycmuIBN73iyziX8m56BvJSDucZ3J/6DU07otWqzS6A==,
+      }
+
+  '@antv/x6-geometry@2.0.5':
+    resolution:
+      {
+        integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==,
+      }
+
+  '@antv/x6-react-shape@2.2.3':
+    resolution:
+      {
+        integrity: sha512-42PGxk3XLnx9bsHQiRPauai5UQCrsh0MbWI3MyHRpjQaC30FK1rqyjH/EJ8qH0p6/cAndszZzCaiPqBbs3FqLQ==,
+      }
+    peerDependencies:
+      '@antv/x6': ^2.x
+      react: '>=18.0.0'
+      react-dom: '>= 18.0.0'
+
+  '@antv/x6@2.18.1':
+    resolution:
+      {
+        integrity: sha512-FkWdbLOpN9J7dfJ+kiBxzowSx2N6syBily13NMVdMs+wqC6Eo5sLXWCZjQHateTFWgFw7ZGi2y9o3Pmdov1sXw==,
       }
 
   '@babel/code-frame@7.24.2':
@@ -8290,6 +8324,13 @@ packages:
         integrity: sha512-Z0DbgELS9/L/75wZbro8xAnT50pBVFQZ+hUEueGDU5FN51YSCYM+jdxsfCiHjwNP/4LCDD0i/graKpeBnOXKRA==,
       }
 
+  utility-types@3.11.0:
+    resolution:
+      {
+        integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==,
+      }
+    engines: { node: '>= 4' }
+
   v8-compile-cache@2.4.0:
     resolution:
       {
@@ -8822,6 +8863,25 @@ snapshots:
       find-up: 5.0.0
 
   '@antfu/utils@0.7.7': {}
+
+  '@antv/x6-common@2.0.17':
+    dependencies:
+      lodash-es: 4.17.21
+      utility-types: 3.11.0
+
+  '@antv/x6-geometry@2.0.5': {}
+
+  '@antv/x6-react-shape@2.2.3(@antv/x6@2.18.1)(react-dom@18.1.0(react@18.1.0))(react@18.1.0)':
+    dependencies:
+      '@antv/x6': 2.18.1
+      react: 18.1.0
+      react-dom: 18.1.0(react@18.1.0)
+
+  '@antv/x6@2.18.1':
+    dependencies:
+      '@antv/x6-common': 2.0.17
+      '@antv/x6-geometry': 2.0.5
+      utility-types: 3.11.0
 
   '@babel/code-frame@7.24.2':
     dependencies:
@@ -14420,6 +14480,8 @@ snapshots:
       inherits: 2.0.3
 
   utila@0.4.0: {}
+
+  utility-types@3.11.0: {}
 
   v8-compile-cache@2.4.0: {}
 
