@@ -1,4 +1,3 @@
-import registerER from '@/nodes/er';
 import { GridLayout } from '@antv/layout';
 import { Graph, Model } from '@antv/x6';
 import { Parser } from '@dbml/core';
@@ -53,7 +52,6 @@ Ref: posts.user_id > users.id // many-to-one
   });
 
   useEffect(() => {
-    registerER();
     if (containerRef.current) {
       const graph = new Graph({
         container: containerRef.current,

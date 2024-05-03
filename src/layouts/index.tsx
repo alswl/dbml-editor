@@ -11,6 +11,9 @@ export default function Layout() {
         <li>
           <a href="https://github.com/alswl/dbml-editor">Github</a>
         </li>
+        <li>
+          <a href="https://twitter.com/alswl">@alswl</a>
+        </li>
       </ul>
 
       <Outlet />
