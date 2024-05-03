@@ -8,7 +8,7 @@ function parseFieldToPort(
   schemaName: string,
   tableName: string,
 ): any {
-  const port = {
+  return {
     id: `${schemaName}-${tableName}-${field.name}`,
     group: 'list',
     attrs: {
@@ -20,7 +20,6 @@ function parseFieldToPort(
       },
     },
   };
-  return port;
 }
 
 function parseTableToNode(table: Table, schemaName: string): any {
@@ -53,7 +52,7 @@ function parseRef(ref: Ref): any {
   const sSchemaName = source.schemaName || 'public';
   const tSchemaName = target.schemaName || 'public';
 
-  const edge = {
+  return {
     id: ``,
     shape: 'edge',
     source: {
@@ -85,7 +84,6 @@ function parseRef(ref: Ref): any {
       },
     ],
   };
-  return edge;
 }
 
 function parseDatabaseToER(database: Database): any {
@@ -105,7 +103,7 @@ function parseDatabaseToER(database: Database): any {
   let edges: any[] = [];
   for (let i = 0; i < database.schemas.length; i++) {
     const schema = database.schemas[i];
-    for (let j = 0; j < database.schemas[i].refs.length; j++) {
+    for (let j = 0; j < schema.refs.length; j++) {
       const ref = database.schemas[i].refs[j];
       const edge = parseRef(ref);
       if (edge === null) {

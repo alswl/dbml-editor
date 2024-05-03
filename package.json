@@ -9,7 +9,9 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@antv/layout": "^0.3.25",
     "@antv/x6": "^2.18.1",
+    "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-react-shape": "^2.2.3",
     "@dbml/core": "^3.4.3",
     "antd": "^5.16.5",

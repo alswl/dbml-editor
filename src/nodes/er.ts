@@ -49,6 +49,7 @@ function registerER() {
       ports: {
         groups: {
           list: {
+            position: 'erPortPosition',
             markup: [
               {
                 tagName: 'rect',
@@ -85,7 +86,6 @@ function registerER() {
                 fontSize: 10,
               },
             },
-            position: 'erPortPosition',
           },
         },
       },

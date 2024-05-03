@@ -1,5 +1,6 @@
 import registerER from '@/nodes/er';
-import { Graph } from '@antv/x6';
+import { GridLayout } from '@antv/layout';
+import { Graph, Model } from '@antv/x6';
 import { Parser } from '@dbml/core';
 import { Col, Row, theme } from 'antd';
 import { debounce } from 'lodash-es';
@@ -7,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 
 import parseDatabaseToER from '@/parser/parser';
+import { Snapline } from '@antv/x6-plugin-snapline';
 import './index.less';
 
 export default () => {
@@ -39,19 +41,51 @@ Enum post_status {
 Ref: posts.user_id > users.id // many-to-one
 `;
   const [code, setCode] = useState(initCode);
-  const [models, setModels] = useState([]);
+  const [models, setModels] = useState<Model.FromJSONData>({});
   const containerRef = useRef(null);
   const parser = new Parser();
+  const layout = new GridLayout({
+    type: 'grid',
+    width: 600,
+    height: 400,
+    rows: 6,
+    cols: 4,
+  });
 
   useEffect(() => {
     registerER();
     if (containerRef.current) {
       const graph = new Graph({
         container: containerRef.current,
+        connecting: {
+          anchor: {
+            name: 'midSide',
+            args: {
+              direction: 'H',
+            },
+          },
+          allowBlank: false,
+          allowEdge: false,
+          allowNode: false,
+        },
         background: {
           color: '#F2F7FA',
         },
+        interacting: {
+          nodeMovable: true,
+          edgeMovable: false,
+          edgeLabelMovable: false,
+          arrowheadMovable: false,
+          vertexMovable: false,
+          vertexAddable: false,
+          vertexDeletable: false,
+        },
       });
+      graph.use(
+        new Snapline({
+          enabled: true,
+        }),
+      );
 
       graph.fromJSON(models);
       graph.centerContent();
@@ -62,7 +96,7 @@ Ref: posts.user_id > users.id // many-to-one
   const editorDidMount = (editor: any, monaco: any) => {
     const database = parser.parse(code, 'dbmlv2');
     let models = parseDatabaseToER(database);
-    setModels(models);
+    setModels(layout.layout(models));
   };
 
   // onchange
@@ -71,7 +105,7 @@ Ref: posts.user_id > users.id // many-to-one
     console.log(database);
     let models = parseDatabaseToER(database);
     console.log(models);
-    setModels(models);
+    setModels(layout.layout(models));
   };
   const debouncedOnChange = debounce(onChange, 500);
 
@@ -79,8 +113,6 @@ Ref: posts.user_id > users.id // many-to-one
     <Row>
       <Col span={12}>
         <MonacoEditor
-          width="800"
-          height="600"
           // dbml not works
           language="dbml"
           theme="vs-dark"
