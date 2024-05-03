@@ -1,0 +1,40 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master
+      - feat/cd
+
+jobs:
+  deploy:
+    permissions:
+      contents: write
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [20.x]
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+          registry-url: 'https://registry.yarnpkg.com'
+
+      - name: install pnpm
+        run: npm i pnpm@latest -g
+      - run: pnpm install
+      - run: pnpm build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        # if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
