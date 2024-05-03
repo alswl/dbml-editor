@@ -1,4 +1,4 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[1034],{31034:function(y,n,o){o.r(n),o.d(n,{conf:function(){return c},language:function(){return v}});var c={comments:{lineComment:"//",blockComment:["/*","*/"]},brackets:[["{","}"],["[","]"],["(",")"]],autoClosingPairs:[{open:"[",close:"]"},{open:"{",close:"}"},{open:"(",close:")"}],surroundingPairs:[{open:"{",close:"}"},{open:"[",close:"]"},{open:"(",close:")"}]};function e(b){let s=[];const a=b.split(/\t+|\r+|\n+| +/);for(let r=0;r<a.length;++r)a[r].length>0&&s.push(a[r]);return s}var m=e("true false"),u=e(`
+"use strict";(self.webpackChunkdbml_editor=self.webpackChunkdbml_editor||[]).push([[1034],{31034:function(y,n,o){o.r(n),o.d(n,{conf:function(){return c},language:function(){return v}});var c={comments:{lineComment:"//",blockComment:["/*","*/"]},brackets:[["{","}"],["[","]"],["(",")"]],autoClosingPairs:[{open:"[",close:"]"},{open:"{",close:"}"},{open:"(",close:")"}],surroundingPairs:[{open:"{",close:"}"},{open:"[",close:"]"},{open:"(",close:")"}]};function e(b){let s=[];const a=b.split(/\t+|\r+|\n+| +/);for(let r=0;r<a.length;++r)a[r].length>0&&s.push(a[r]);return s}var m=e("true false"),u=e(`
 			  alias
 			  break
 			  case
@@ -169,7 +169,7 @@
 			  with
 			  writeonly
 			  yield
-			  `),p=e(`
+			  `),d=e(`
 		read write read_write
 		function private workgroup uniform storage
 		perspective linear flat
@@ -195,7 +195,7 @@
 		rgba32sint
 		rgba32float
 		bgra8unorm
-`),d=e(`
+`),p=e(`
 		bool
 		f16
 		f32
@@ -295,4 +295,4 @@
 					 ^=
 					 >>=
 					 <<=
-					 `),h=/enable|requires|diagnostic/,i=new RegExp("[_\\p{XID_Start}]\\p{XID_Continue}*","u"),t="variable.predefined",v={tokenPostfix:".wgsl",defaultToken:"invalid",unicode:!0,atoms:m,keywords:u,reserved:l,predeclared_enums:p,predeclared_types:d,predeclared_type_generators:x,predeclared_type_aliases:f,predeclared_intrinsics:_,operators:g,symbols:/[!%&*+\-\.\/:;<=>^|_~,]+/,tokenizer:{root:[[h,"keyword","@directive"],[i,{cases:{"@atoms":t,"@keywords":"keyword","@reserved":"invalid","@predeclared_enums":t,"@predeclared_types":t,"@predeclared_type_generators":t,"@predeclared_type_aliases":t,"@predeclared_intrinsics":t,"@default":"identifier"}}],{include:"@commentOrSpace"},{include:"@numbers"},[/[{}()\[\]]/,"@brackets"],["@","annotation","@attribute"],[/@symbols/,{cases:{"@operators":"operator","@default":"delimiter"}}],[/./,"invalid"]],commentOrSpace:[[/\s+/,"white"],[/\/\*/,"comment","@blockComment"],[/\/\/.*$/,"comment"]],blockComment:[[/[^\/*]+/,"comment"],[/\/\*/,"comment","@push"],[/\*\//,"comment","@pop"],[/[\/*]/,"comment"]],attribute:[{include:"@commentOrSpace"},[/\w+/,"annotation","@pop"]],directive:[{include:"@commentOrSpace"},[/[()]/,"@brackets"],[/,/,"delimiter"],[i,"meta.content"],[/;/,"delimiter","@pop"]],numbers:[[/0[fh]/,"number.float"],[/[1-9][0-9]*[fh]/,"number.float"],[/[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?[fh]?/,"number.float"],[/[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?[fh]?/,"number.float"],[/[0-9]+[eE][+-]?[0-9]+[fh]?/,"number.float"],[/0[xX][0-9a-fA-F]*\.[0-9a-fA-F]+(?:[pP][+-]?[0-9]+[fh]?)?/,"number.hex"],[/0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*(?:[pP][+-]?[0-9]+[fh]?)?/,"number.hex"],[/0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+[fh]?/,"number.hex"],[/0[xX][0-9a-fA-F]+[iu]?/,"number.hex"],[/[1-9][0-9]*[iu]?/,"number"],[/0[iu]?/,"number"]]}}}}]);
+					 `),h=/enable|requires|diagnostic/,i=new RegExp("[_\\p{XID_Start}]\\p{XID_Continue}*","u"),t="variable.predefined",v={tokenPostfix:".wgsl",defaultToken:"invalid",unicode:!0,atoms:m,keywords:u,reserved:l,predeclared_enums:d,predeclared_types:p,predeclared_type_generators:x,predeclared_type_aliases:f,predeclared_intrinsics:_,operators:g,symbols:/[!%&*+\-\.\/:;<=>^|_~,]+/,tokenizer:{root:[[h,"keyword","@directive"],[i,{cases:{"@atoms":t,"@keywords":"keyword","@reserved":"invalid","@predeclared_enums":t,"@predeclared_types":t,"@predeclared_type_generators":t,"@predeclared_type_aliases":t,"@predeclared_intrinsics":t,"@default":"identifier"}}],{include:"@commentOrSpace"},{include:"@numbers"},[/[{}()\[\]]/,"@brackets"],["@","annotation","@attribute"],[/@symbols/,{cases:{"@operators":"operator","@default":"delimiter"}}],[/./,"invalid"]],commentOrSpace:[[/\s+/,"white"],[/\/\*/,"comment","@blockComment"],[/\/\/.*$/,"comment"]],blockComment:[[/[^\/*]+/,"comment"],[/\/\*/,"comment","@push"],[/\*\//,"comment","@pop"],[/[\/*]/,"comment"]],attribute:[{include:"@commentOrSpace"},[/\w+/,"annotation","@pop"]],directive:[{include:"@commentOrSpace"},[/[()]/,"@brackets"],[/,/,"delimiter"],[i,"meta.content"],[/;/,"delimiter","@pop"]],numbers:[[/0[fh]/,"number.float"],[/[1-9][0-9]*[fh]/,"number.float"],[/[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?[fh]?/,"number.float"],[/[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?[fh]?/,"number.float"],[/[0-9]+[eE][+-]?[0-9]+[fh]?/,"number.float"],[/0[xX][0-9a-fA-F]*\.[0-9a-fA-F]+(?:[pP][+-]?[0-9]+[fh]?)?/,"number.hex"],[/0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*(?:[pP][+-]?[0-9]+[fh]?)?/,"number.hex"],[/0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+[fh]?/,"number.hex"],[/0[xX][0-9a-fA-F]+[iu]?/,"number.hex"],[/[1-9][0-9]*[iu]?/,"number"],[/0[iu]?/,"number"]]}}}}]);
