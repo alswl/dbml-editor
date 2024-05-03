@@ -1,91 +1,50 @@
-import { Graph, Node } from '@antv/x6';
-import { register } from '@antv/x6-react-shape';
-import { Col, Dropdown, Row, theme } from 'antd';
+import registerER from '@/nodes/er';
+import { Graph } from '@antv/x6';
+import { Parser } from '@dbml/core';
+import { Col, Row, theme } from 'antd';
+import { debounce } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
+
+import parseDatabaseToER from '@/parser/parser';
 import './index.less';
 
-const CustomComponent = ({ node }: { node: Node }) => {
-  const label = node.prop('label');
-  return (
-    <Dropdown
-      menu={{
-        items: [
-          {
-            key: 'copy',
-            label: '复制',
-          },
-          {
-            key: 'paste',
-            label: '粘贴',
-          },
-          {
-            key: 'delete',
-            label: '删除',
-          },
-        ],
-      }}
-      trigger={['contextMenu']}
-    >
-      <div className="custom-react-node">{label}</div>
-    </Dropdown>
-  );
-};
-
-register({
-  shape: 'custom-react-node',
-  width: 100,
-  height: 40,
-  component: CustomComponent,
-});
-
-const data = {
-  nodes: [
-    {
-      id: 'node1',
-      shape: 'custom-react-node',
-      x: 40,
-      y: 40,
-      label: 'hello',
-    },
-    {
-      id: 'node2',
-      shape: 'custom-react-node',
-      x: 160,
-      y: 180,
-      label: 'world',
-    },
-  ],
-  edges: [
-    {
-      shape: 'edge',
-      source: 'node1',
-      target: 'node2',
-      label: 'x6',
-      attrs: {
-        line: {
-          stroke: '#8f8f8f',
-          strokeWidth: 1,
-        },
-      },
-    },
-  ],
-};
 export default () => {
   // constructor
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const initCode = `Table staff {
-  id int [pk]
-  name varchar
-  age int
-  email varchar
-}`;
+  const initCode = `Table users {
+  id integer
+  username varchar
+  role varchar
+  created_at timestamp
+}
+
+Table posts {
+  id integer [primary key]
+  title varchar
+  body text [note: 'Content of the post']
+  user_id integer
+  status post_status
+  created_at timestamp
+}
+
+Enum post_status {
+  draft
+  published
+  private [note: 'visible via URL only']
+}
+
+Ref: posts.user_id > users.id // many-to-one
+`;
   const [code, setCode] = useState(initCode);
+  const [models, setModels] = useState([]);
   const containerRef = useRef(null);
+  const parser = new Parser();
 
   useEffect(() => {
+    registerER();
     if (containerRef.current) {
       const graph = new Graph({
         container: containerRef.current,
@@ -94,20 +53,27 @@ export default () => {
         },
       });
 
-      graph.fromJSON(data);
+      graph.fromJSON(models);
       graph.centerContent();
     }
-  }, []);
+  }, [models]);
 
   // editorDidMount
   const editorDidMount = (editor: any, monaco: any) => {
-    console.log('editorDidMount', editor);
+    const database = parser.parse(code, 'dbmlv2');
+    let models = parseDatabaseToER(database);
+    setModels(models);
   };
 
   // onchange
   const onChange = (newValue: any, e: any) => {
-    console.log('onChange', newValue, e);
+    const database = parser.parse(newValue, 'dbmlv2');
+    console.log(database);
+    let models = parseDatabaseToER(database);
+    console.log(models);
+    setModels(models);
   };
+  const debouncedOnChange = debounce(onChange, 500);
 
   return (
     <Row>
@@ -121,8 +87,11 @@ export default () => {
           value={code}
           options={{
             selectOnLineNumbers: true,
+            minimap: {
+              enabled: false,
+            },
           }}
-          onChange={onChange}
+          onChange={debouncedOnChange}
           editorDidMount={editorDidMount}
         />
       </Col>
