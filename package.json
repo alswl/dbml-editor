@@ -1,7 +1,6 @@
 {
   "name": "dbml-editor",
   "version": "0.1.0",
-  "private": true,
   "author": "Jingchao Di <alswlx@gmail.com>",
   "scripts": {
     "build": "umi build",

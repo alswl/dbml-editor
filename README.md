@@ -1,8 +1,8 @@
 # dbml-editor
 
-> status: `in progress`
-
 Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
+
+![build-status](https://github.com/alswl/dbml-editor/actions/workflows/ci.yaml/badge.svg)
 
 ## Online Editor
 
@@ -10,7 +10,8 @@ Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 
 ## Features
 
-- Live preview of the DBML file
+- Syntax highlighting
+- Live preview
 
 ## Alternatives
 
@@ -21,6 +22,5 @@ Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 ## Roadmap
 
 - Full support for DBML feature
-- Syntax highlighting
 - Export to SQL
 - Import from SQL
