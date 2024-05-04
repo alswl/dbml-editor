@@ -1,4 +1,4 @@
-import { GridLayout } from '@antv/layout';
+import { DagreLayout, GridLayout } from '@antv/layout';
 import { Graph, Model } from '@antv/x6';
 import { Parser } from '@dbml/core';
 import { Col, Row, theme } from 'antd';
@@ -43,13 +43,22 @@ Ref: posts.user_id > users.id // many-to-one
   const [models, setModels] = useState<Model.FromJSONData>({});
   const containerRef = useRef(null);
   const parser = new Parser();
-  const layout = new GridLayout({
+  new GridLayout({
     type: 'grid',
     width: 600,
     height: 400,
     rows: 6,
     cols: 4,
   });
+  const dagreLayout = new DagreLayout({
+    type: 'dagre',
+    rankdir: 'LR',
+    align: 'UL',
+    ranksep: 80,
+    nodesep: 60,
+    controlPoints: true,
+  });
+  const layout = dagreLayout;
 
   useEffect(() => {
     if (containerRef.current) {
@@ -78,6 +87,8 @@ Ref: posts.user_id > users.id // many-to-one
           vertexAddable: false,
           vertexDeletable: false,
         },
+        panning: true,
+        mousewheel: true,
       });
       graph.use(
         new Snapline({

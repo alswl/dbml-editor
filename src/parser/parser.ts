@@ -8,12 +8,19 @@ function parseFieldToPort(
   schemaName: string,
   tableName: string,
 ): any {
+  let label = field.name;
+  if (field.pk) {
+    label += ' 🔑';
+  }
+  if (field.not_null) {
+    label += ' 🚫';
+  }
   return {
     id: `${schemaName}-${tableName}-${field.name}`,
     group: 'list',
     attrs: {
       portNameLabel: {
-        text: field.name,
+        text: label,
       },
       portTypeLabel: {
         text: field.type.type_name || 'unknown',
@@ -68,7 +75,7 @@ function parseRef(ref: Ref): any {
         attrs: {
           label: {
             text: source.relation,
-            stroke: '#aaa',
+            fontFamily: 'monospace',
           },
         },
         position: 0.2,
@@ -77,7 +84,7 @@ function parseRef(ref: Ref): any {
         attrs: {
           label: {
             text: target.relation,
-            stroke: '#aaa',
+            fontFamily: 'monospace',
           },
         },
         position: 0.8,
