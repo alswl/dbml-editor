@@ -88,7 +88,7 @@ Ref: posts.user_id > users.id // many-to-one
           vertexDeletable: false,
         },
         panning: true,
-        mousewheel: true,
+        mousewheel: false,
       });
       graph.use(
         new Snapline({
