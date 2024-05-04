@@ -20,6 +20,8 @@ export default () => {
   username varchar
   role varchar
   created_at timestamp
+
+  Note: 'User Table'
 }
 
 Table posts {

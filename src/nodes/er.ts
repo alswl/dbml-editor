@@ -19,6 +19,20 @@ function registerER() {
     },
     true,
   );
+  Graph.registerPortLayout(
+    'erNotePosition',
+    (portsPositionArgs) => {
+      return portsPositionArgs.map((_, index) => {
+        return {
+          position: {
+            x: 0,
+            y: 0,
+          },
+        };
+      });
+    },
+    true,
+  );
 
   Graph.registerNode(
     'er-rect',
@@ -48,6 +62,21 @@ function registerER() {
       },
       ports: {
         groups: {
+          note: {
+            position: 'erNotePosition',
+            markup: [
+              {
+                tagName: 'text',
+                selector: 'note',
+              },
+            ],
+            attrs: {
+              note: {
+                refX: 0,
+                refY: -LINE_HEIGHT,
+              },
+            },
+          },
           list: {
             position: 'erPortPosition',
             markup: [

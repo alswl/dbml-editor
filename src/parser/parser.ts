@@ -29,12 +29,32 @@ function parseFieldToPort(
   };
 }
 
+function parseNoteToPort(
+  note: string,
+  schemaName: string,
+  tableName: string,
+): any {
+  return {
+    id: `${schemaName}-${tableName}-note`,
+    group: 'note',
+    attrs: {
+      note: {
+        text: note,
+      },
+    },
+  };
+}
+
 function parseTableToNode(table: Table, schemaName: string): any {
   let fields: any[] = [];
   for (let k = 0; k < table.fields.length; k++) {
     const f = table.fields[k];
     const field = parseFieldToPort(f, schemaName, table.name);
     fields.push(field);
+  }
+  if (table.note) {
+    const note = parseNoteToPort(table.note, schemaName, table.name);
+    fields.push(note);
   }
   return {
     id: `${schemaName}-${table.name}`,
@@ -62,6 +82,14 @@ function parseRef(ref: Ref): any {
   return {
     id: ``,
     shape: 'edge',
+    router: {
+      name: 'er',
+      args: {
+        offset: 16,
+        min: 4,
+        direction: 'H',
+      },
+    },
     source: {
       cell: `${sSchemaName}-${source.tableName}`,
       port: `${sSchemaName}-${source.tableName}-${sourceFieldName}`,
