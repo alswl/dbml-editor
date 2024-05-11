@@ -9,6 +9,8 @@ import MonacoEditor from 'react-monaco-editor';
 import parseDatabaseToER from '@/parser/parser';
 import { Snapline } from '@antv/x6-plugin-snapline';
 import './index.less';
+import { PageContainer } from '@ant-design/pro-components';
+import { useModel } from '@umijs/max';
 
 export default () => {
   // constructor
@@ -120,29 +122,33 @@ Ref: posts.user_id > users.id // many-to-one
   };
   const debouncedOnChange = debounce(onChange, 500);
 
+  const { name } = useModel('global');
+
   return (
-    <Row>
-      <Col span={12}>
-        <MonacoEditor
-          // dbml not works
-          language="dbml"
-          theme="vs-dark"
-          value={code}
-          options={{
-            selectOnLineNumbers: true,
-            minimap: {
-              enabled: false,
-            },
-          }}
-          onChange={debouncedOnChange}
-          editorDidMount={editorDidMount}
-        />
-      </Col>
-      <Col span={12}>
-        <div className="react-shape-app">
-          <div className="app-content" ref={containerRef} />
-        </div>
-      </Col>
-    </Row>
+    <PageContainer ghost header={{ title: '' }}>
+      <Row>
+        <Col span={12}>
+          <MonacoEditor
+            // dbml not works
+            language="dbml"
+            theme="vs-dark"
+            value={code}
+            options={{
+              selectOnLineNumbers: true,
+              minimap: {
+                enabled: false,
+              },
+            }}
+            onChange={debouncedOnChange}
+            editorDidMount={editorDidMount}
+          />
+        </Col>
+        <Col span={12}>
+          <div className="react-shape-app">
+            <div className="app-content" ref={containerRef} />
+          </div>
+        </Col>
+      </Row>
+    </PageContainer>
   );
 };
