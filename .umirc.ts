@@ -34,4 +34,7 @@ export default defineConfig({
   ],
   npmClient: 'pnpm',
   esbuildMinifyIIFE: true,
+  analytics: {
+    ga_v2: 'G-SFYS0VCR5W', // Google Analytics 的 key (GA 4)
+  }
 });
