@@ -36,5 +36,6 @@ export default defineConfig({
   esbuildMinifyIIFE: true,
   analytics: {
     ga_v2: 'G-SFYS0VCR5W', // Google Analytics 的 key (GA 4)
+    baidu: '4d80269d802b65e5b0356366f7fbb125',
   }
 });
