@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2024-05-12
+
+### 🚀 Features
+
+- Enable baidu analytics
+- Enable response web design
+- Enable error diags, refactor viewer components
+
 ## [0.3.0] - 2024-05-11
 
 ### 🚀 Features
@@ -11,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Enable Google Analytics
+- Bump version and gen changelog
 
 ## [0.2.0] - 2024-05-04
 

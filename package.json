@@ -1,6 +1,6 @@
 {
   "name": "dbml-editor",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Jingchao Di <alswlx@gmail.com>",
   "scripts": {
     "build": "max build",
