@@ -1,158 +1,85 @@
-import { DagreLayout, GridLayout } from '@antv/layout';
-import { Graph, Model } from '@antv/x6';
-import { Parser } from '@dbml/core';
-import { Col, Row, theme } from 'antd';
+import { CompilerDiagnostic, Parser } from '@dbml/core';
+import { Col, Row, message } from 'antd';
 import { debounce } from 'lodash-es';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 
-import parseDatabaseToER from '@/parser/parser';
-import { Snapline } from '@antv/x6-plugin-snapline';
-import './index.less';
+import { InitCode } from '@/components/editor';
+import Viewer from '@/components/viewer/viewer';
 import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { CompilerError } from '@dbml/core/types/parse/error';
+import './index.less';
 
 export default () => {
-  // constructor
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-  const initCode = `Table users {
-  id integer
-  username varchar
-  role varchar
-  created_at timestamp
-
-  Note: 'User Table'
-}
-
-Table posts {
-  id integer [primary key]
-  title varchar
-  body text [note: 'Content of the post']
-  user_id integer
-  status post_status
-  created_at timestamp
-}
-
-Enum post_status {
-  draft
-  published
-  private [note: 'visible via URL only']
-}
-
-Ref: posts.user_id > users.id // many-to-one
-`;
-  const [code, setCode] = useState(initCode);
-  const [models, setModels] = useState<Model.FromJSONData>({});
-  const containerRef = useRef(null);
+  const [messageApi, contextHolder] = message.useMessage();
   const parser = new Parser();
-  new GridLayout({
-    type: 'grid',
-    width: 600,
-    height: 400,
-    rows: 6,
-    cols: 4,
-  });
-  const dagreLayout = new DagreLayout({
-    type: 'dagre',
-    rankdir: 'LR',
-    align: 'UL',
-    ranksep: 80,
-    nodesep: 60,
-    controlPoints: true,
-  });
-  const layout = dagreLayout;
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const graph = new Graph({
-        container: containerRef.current,
-        connecting: {
-          anchor: {
-            name: 'midSide',
-            args: {
-              direction: 'H',
-            },
-          },
-          allowBlank: false,
-          allowEdge: false,
-          allowNode: false,
-        },
-        background: {
-          color: '#F2F7FA',
-        },
-        interacting: {
-          nodeMovable: true,
-          edgeMovable: false,
-          edgeLabelMovable: false,
-          arrowheadMovable: false,
-          vertexMovable: false,
-          vertexAddable: false,
-          vertexDeletable: false,
-        },
-        panning: true,
-        mousewheel: false,
-      });
-      graph.use(
-        new Snapline({
-          enabled: true,
-        }),
-      );
-
-      graph.fromJSON(models);
-      graph.centerContent();
-    }
-  }, [models]);
+  const [code] = useState(InitCode);
+  let initialDatabase = parser.parse(code, 'dbmlv2');
+  const [database, setDatabase] = useState(initialDatabase);
 
   // editorDidMount
-  const editorDidMount = (editor: any, monaco: any) => {
-    const database = parser.parse(code, 'dbmlv2');
-    let models = parseDatabaseToER(database);
-    setModels(layout.layout(models));
+  const editorDidMount = () => {
+    setDatabase(initialDatabase);
   };
 
   // onchange
-  const onChange = (newValue: any, e: any) => {
-    const database = parser.parse(newValue, 'dbmlv2');
-    console.log(database);
-    let models = parseDatabaseToER(database);
-    console.log(models);
-    setModels(layout.layout(models));
+  const onChange = (newValue: any) => {
+    try {
+      const newDB = parser.parse(newValue, 'dbmlv2');
+      console.log(newDB);
+      setDatabase(newDB);
+    } catch (e) {
+      if (e as CompilerError) {
+        const diags = (e as CompilerError).diags
+          .map((d: CompilerDiagnostic) => {
+            return `${d.location.start.line}:${d.location.start.column} ${d.message}`;
+          })
+          .join('\n');
+
+        messageApi.error(diags);
+        console.error(e);
+        // TODO hl to editor
+      } else if (e instanceof Error) {
+        messageApi.error(`${e.message}`);
+      } else {
+        throw e;
+      }
+    }
   };
   const debouncedOnChange = debounce(onChange, 500);
 
-  const { name } = useModel('global');
-
   return (
-    <PageContainer ghost header={{ title: '' }}>
-      <Row gutter={[8, 8]}>
-        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
-          <div className="editor">
-            <MonacoEditor
-              width={'100%'}
-              language="dbml"
-              theme="vs-dark"
-              value={code}
-              options={{
-                selectOnLineNumbers: true,
-                minimap: {
-                  enabled: false,
-                },
-                automaticLayout: true,
-              }}
-              onChange={debouncedOnChange}
-              editorDidMount={editorDidMount}
-              // handle resize TODO
-            />
-          </div>
-        </Col>
-        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
-          <div className="react-shape-app">
-            <div className="app-content" ref={containerRef} />
-          </div>
-        </Col>
-      </Row>
-    </PageContainer>
+    <>
+      {contextHolder}
+      <PageContainer ghost header={{ title: '' }}>
+        <Row gutter={[8, 8]}>
+          <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+            <div className="editor">
+              <MonacoEditor
+                width={'100%'}
+                language="dbml"
+                theme="vs-dark"
+                value={code}
+                options={{
+                  selectOnLineNumbers: true,
+                  minimap: {
+                    enabled: false,
+                  },
+                  automaticLayout: true,
+                  scrollBeyondLastLine: false,
+                }}
+                onChange={debouncedOnChange}
+                editorDidMount={editorDidMount}
+                // handle resize TODO
+              />
+            </div>
+          </Col>
+          <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+            <Viewer code={code} database={database} />
+          </Col>
+        </Row>
+      </PageContainer>
+    </>
   );
 };

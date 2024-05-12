@@ -7,7 +7,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: 'dbml-editor',
+    title: 'dbml-editor - free online DBML editor',
     locale: false,
   },
   routes: [
@@ -30,12 +30,11 @@ export default defineConfig({
       path: 'https://twitter.com/alswl',
       external: true,
     },
-
   ],
   npmClient: 'pnpm',
   esbuildMinifyIIFE: true,
   analytics: {
     ga_v2: 'G-SFYS0VCR5W', // Google Analytics 的 key (GA 4)
     baidu: '4d80269d802b65e5b0356366f7fbb125',
-  }
+  },
 });

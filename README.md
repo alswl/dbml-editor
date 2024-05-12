@@ -1,8 +1,8 @@
 # dbml-editor
 
-Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
-
 ![build-status](https://github.com/alswl/dbml-editor/actions/workflows/ci.yaml/badge.svg)
+
+Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 
 ## Online Editor
 
@@ -18,6 +18,7 @@ Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 - [dbdiagram.io](https://dbdiagram.io/home/)
 - [dbml.org](https://dbml.org/)
 - [dber](https://dber.tech/)
+- [TruDan/dbdiagram-oss](https://github.com/TruDan/dbdiagram-oss)
 
 ## Roadmap
 
