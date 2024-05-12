@@ -126,24 +126,28 @@ Ref: posts.user_id > users.id // many-to-one
 
   return (
     <PageContainer ghost header={{ title: '' }}>
-      <Row>
-        <Col span={12}>
-          <MonacoEditor
-            // dbml not works
-            language="dbml"
-            theme="vs-dark"
-            value={code}
-            options={{
-              selectOnLineNumbers: true,
-              minimap: {
-                enabled: false,
-              },
-            }}
-            onChange={debouncedOnChange}
-            editorDidMount={editorDidMount}
-          />
+      <Row gutter={[8, 8]}>
+        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+          <div className="editor">
+            <MonacoEditor
+              width={'100%'}
+              language="dbml"
+              theme="vs-dark"
+              value={code}
+              options={{
+                selectOnLineNumbers: true,
+                minimap: {
+                  enabled: false,
+                },
+                automaticLayout: true,
+              }}
+              onChange={debouncedOnChange}
+              editorDidMount={editorDidMount}
+              // handle resize TODO
+            />
+          </div>
         </Col>
-        <Col span={12}>
+        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
           <div className="react-shape-app">
             <div className="app-content" ref={containerRef} />
           </div>
