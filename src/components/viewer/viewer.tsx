@@ -5,7 +5,6 @@ import { Snapline } from '@antv/x6-plugin-snapline';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
-  code: string;
   database: any;
 }
 
