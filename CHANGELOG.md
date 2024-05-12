@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2024-05-12
+
+### 🚀 Features
+
+- Import sql and export dbml
+
 ## [0.4.0] - 2024-05-12
 
 ### 🚀 Features
@@ -9,6 +15,10 @@ All notable changes to this project will be documented in this file.
 - Enable baidu analytics
 - Enable response web design
 - Enable error diags, refactor viewer components
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump version
 
 ## [0.3.0] - 2024-05-11
 
