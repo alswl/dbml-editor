@@ -1,4 +1,4 @@
-import { CompilerDiagnostic, exporter, importer, Parser } from '@dbml/core';
+import { exporter, importer, Parser } from '@dbml/core';
 import { Col, FloatButton, message, Modal, Row, Select, Space } from 'antd';
 import { debounce } from 'lodash-es';
 import { useEffect, useState } from 'react';
@@ -6,21 +6,14 @@ import MonacoEditor from 'react-monaco-editor';
 
 import { InitCode } from '@/components/editor';
 import Viewer from '@/components/viewer/viewer';
+import ErrorFmt, { ExportFormat, ImportFormat } from '@/services/dbml';
 import { ExportOutlined, ImportOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { CompilerError } from '@dbml/core/types/parse/error';
 import TextArea from 'antd/es/input/TextArea';
 import './index.less';
 
-type ImportFormat =
-  | 'dbml'
-  | 'mysql'
-  | 'postgres'
-  | 'json'
-  | 'mssql'
-  | 'postgresLegacy';
-
-type ExportFormat = 'dbml' | 'mysql' | 'postgres' | 'json' | 'mssql' | 'oracle';
+const defaultBuildDelay = 2000;
 
 export default () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -39,40 +32,18 @@ export default () => {
   const [exportText, setExportText] = useState('');
   const [regen, setRegen] = useState(0);
 
-  // editorDidMount
+  // editor init
   const editorDidMount = () => {
     setDatabase(initialDatabase);
   };
-
-  // code change
-  useEffect(() => {
-    try {
-      const newDB = parser.parse(code, 'dbmlv2');
-      setDatabase(newDB);
-    } catch (e) {
-      if (e as CompilerError) {
-        const diags = (e as CompilerError).diags
-          .map((d: CompilerDiagnostic) => {
-            return `${d.location.start.line}:${d.location.start.column} ${d.message}`;
-          })
-          .join('\n');
-
-        messageApi.error(diags);
-        // TODO hl to editor
-      } else if (e instanceof Error) {
-        messageApi.error(`${e.message}`);
-      } else {
-        throw e;
-      }
-    }
-  }, [code]);
 
   // editor change
   const editorOnChange = (newValue: any) => {
     setCode(newValue);
   };
-  const debouncedOnChange = debounce(editorOnChange, 500);
+  const debouncedOnChange = debounce(editorOnChange, defaultBuildDelay);
 
+  // handle import
   const handleImport = () => {
     try {
       const s = importer.import(importText, importFormat);
@@ -80,13 +51,7 @@ export default () => {
       setIsImportModalOpen(false);
     } catch (e) {
       if (e as CompilerError) {
-        const diags = (e as CompilerError).diags
-          .map((d: CompilerDiagnostic) => {
-            return `${d.location.start.line}:${d.location.start.column} ${d.message}`;
-          })
-          .join('\n');
-
-        messageApi.error(diags);
+        messageApi.error(ErrorFmt(e as CompilerError));
       } else if (e instanceof Error) {
         messageApi.error(`${e.message}`);
         return;
@@ -96,6 +61,24 @@ export default () => {
     }
   };
 
+  // code change regen database
+  useEffect(() => {
+    try {
+      const newDB = parser.parse(code, 'dbmlv2');
+      setDatabase(newDB);
+    } catch (e) {
+      if (e as CompilerError) {
+        messageApi.error(ErrorFmt(e as CompilerError));
+        // TODO hl to editor
+      } else if (e instanceof Error) {
+        messageApi.error(`${e.message}`);
+      } else {
+        throw e;
+      }
+    }
+  }, [code]);
+
+  // export regen
   useEffect(() => {
     if (!isExportModalOpen) return;
 
@@ -104,13 +87,7 @@ export default () => {
       setExportText(s);
     } catch (e) {
       if (e as CompilerError) {
-        const diags = (e as CompilerError).diags
-          .map((d: CompilerDiagnostic) => {
-            return `${d.location.start.line}:${d.location.start.column} ${d.message}`;
-          })
-          .join('\n');
-
-        messageApi.error(diags);
+        messageApi.error(ErrorFmt(e as CompilerError));
       } else if (e instanceof Error) {
         messageApi.error(`${e.message}`);
       } else {

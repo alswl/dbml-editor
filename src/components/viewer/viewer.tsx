@@ -1,4 +1,4 @@
-import parseDatabaseToER from '@/parser/parser';
+import parseDatabaseToER from '@/services/er';
 import { DagreLayout } from '@antv/layout';
 import { Graph, Model } from '@antv/x6';
 import { Snapline } from '@antv/x6-plugin-snapline';

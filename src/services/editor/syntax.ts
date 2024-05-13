@@ -138,6 +138,7 @@ function registerSyntax() {
         { include: '@whitespace' },
 
         // delimiters and operators
+        // eslint-disable-next-line no-useless-escape
         [/[\[\]{}().,;]/, '@brackets'],
         [
           /@symbols/,
@@ -150,6 +151,7 @@ function registerSyntax() {
         ],
 
         // numbers
+        // eslint-disable-next-line no-useless-escape
         [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
         [/0[xX][0-9a-fA-F]+/, 'number.hex'],
         [/\d+/, 'number'],
@@ -165,8 +167,10 @@ function registerSyntax() {
       ],
 
       comment: [
+        // eslint-disable-next-line no-useless-escape
         [/[^\/*]+/, 'comment'],
         [/\*\//, 'comment', '@pop'],
+        // eslint-disable-next-line no-useless-escape
         [/[\/*]/, 'comment'],
       ],
 

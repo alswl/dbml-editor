@@ -2,7 +2,7 @@
 
 ![build-status](https://github.com/alswl/dbml-editor/actions/workflows/ci.yaml/badge.svg)
 
-Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
+Free online editor [DBML](https://dbml.dbdiagram.io/home/) editor.
 
 ## Online Editor
 
@@ -10,8 +10,10 @@ Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 
 ## Features
 
-- Syntax highlighting
+- DBML syntax highlighting
 - Live preview
+- Import from SQL
+- Export to SQL
 
 ## Alternatives
 
@@ -22,6 +24,8 @@ Online editor for [DBML](https://dbml.dbdiagram.io/home/) files.
 
 ## Roadmap
 
-- Full support for DBML feature
-- Export to SQL
-- Import from SQL
+- Better syntax highlighting
+- Editor inline error hint
+- hidden foreign key
+- better style based on note
+- ER positions save and restore
