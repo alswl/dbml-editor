@@ -3,12 +3,33 @@
   width: 100%;
   padding: 0;
   font-family: sans-serif;
+  position: relative;
 
   .app-content {
     flex: 1;
     height: 800px;
     border-radius: 5px;
     box-shadow: 0 12px 5px -10px rgb(0 0 0 / 10%), 0 0 4px 0 rgb(0 0 0 / 10%);
+  }
+
+  .zoom-toolbar {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    z-index: 10;
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 15%);
+
+    .zoom-level {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 65%);
+      padding: 4px 0;
+      font-weight: 500;
+      min-width: 40px;
+    }
   }
 
   .custom-react-node {
