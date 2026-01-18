@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdbml_editor=self.webpackChunkdbml_editor||[]).push([[974],{80974:function(d,n,t){t.r(n),t.d(n,{default:function(){return e}});var l=t(75271),u=t(94024),E=t(52676);function e(){var o=(0,u.useOutletContext)();return(0,E.jsx)(u.Outlet,{context:o})}}}]);
