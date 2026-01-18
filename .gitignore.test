@@ -1,12 +1,4 @@
-/node_modules
-/.env.local
-/.umirc.local.ts
-/config/config.local.ts
-/src/.umi
-/src/.umi-production
-/src/.umi-test
-/dist
-.swc
+# 测试相关的 Git 忽略文件
 
 # Jest 覆盖率报告
 coverage/

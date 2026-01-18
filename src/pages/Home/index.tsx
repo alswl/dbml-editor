@@ -1,5 +1,14 @@
 import { exporter, importer, Parser } from '@dbml/core';
-import { Col, FloatButton, message, Modal, Row, Select, Space } from 'antd';
+import {
+  Col,
+  FloatButton,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Space,
+} from 'antd';
 import { debounce } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
@@ -10,8 +19,9 @@ import ErrorFmt, { ExportFormat, ImportFormat } from '@/services/dbml';
 import { ExportOutlined, ImportOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { CompilerError } from '@dbml/core/types/parse/error';
-import TextArea from 'antd/es/input/TextArea';
 import './index.less';
+
+const { TextArea } = Input;
 
 const defaultBuildDelay = 2000;
 
