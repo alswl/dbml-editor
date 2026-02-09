@@ -22,6 +22,7 @@
     "@ant-design/pro-components": "^2.4.4",
     "@antv/layout": "^0.3.25",
     "@antv/x6": "^2.18.1",
+    "@antv/x6-common": "^2.0.17",
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-react-shape": "^2.2.3",
     "@dbml/core": "^3.4.3",

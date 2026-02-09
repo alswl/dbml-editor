@@ -20,6 +20,9 @@ importers:
       '@antv/x6':
         specifier: ^2.18.1
         version: 2.19.2
+      '@antv/x6-common':
+        specifier: ^2.0.17
+        version: 2.0.17
       '@antv/x6-plugin-snapline':
         specifier: ^2.1.7
         version: 2.1.7(@antv/x6@2.19.2)
