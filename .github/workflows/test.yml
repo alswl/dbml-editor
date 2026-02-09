@@ -6,27 +6,28 @@ jobs:
   unit-test:
     name: Unit Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          
+          cache: 'pnpm'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 8
-          
+
       - name: Install dependencies
         run: CI=true pnpm install --no-frozen-lockfile
-        
+
       - name: Run unit tests
         run: npm run test:coverage
-        
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
         with:
@@ -38,30 +39,41 @@ jobs:
   e2e-test:
     name: E2E Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          
+          cache: 'pnpm'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 8
-          
+
       - name: Install dependencies
         run: CI=true pnpm install --no-frozen-lockfile
-        
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-chromium-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-chromium-
+
       - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
-        
+
       - name: Run E2E tests
         run: npm run test:e2e -- --project=chromium
-        
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,7 +81,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-          
+
       - name: Upload test videos
         if: failure()
         uses: actions/upload-artifact@v4
@@ -81,28 +93,29 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [unit-test]
-    
+    needs: [unit-test, e2e-test]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          
+          cache: 'pnpm'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 8
-          
+
       - name: Install dependencies
         run: CI=true pnpm install --no-frozen-lockfile
-        
+
       - name: Build project
         run: npm run build
-        
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
