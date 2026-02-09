@@ -9,6 +9,10 @@ jest.mock('@antv/x6', () => {
     fromJSON: jest.fn(),
     centerContent: jest.fn(),
     dispose: jest.fn(),
+    on: jest.fn(),
+    zoom: jest.fn(),
+    zoomToFit: jest.fn(),
+    zoomTo: jest.fn(),
   };
 
   return {

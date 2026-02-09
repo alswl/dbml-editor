@@ -8,7 +8,14 @@ test.describe('ER Diagram - Interaction', () => {
   });
 
   test('should render ER diagram nodes', async ({ page }) => {
+    // Wait for the diagram to render completely
+    await page.waitForSelector('.react-shape-app', { timeout: 10000 });
+    await page.waitForTimeout(2000); // Wait for initial render and data binding
+
+    // Use a locator that waits for the condition
     const nodes = page.locator('svg g[data-cell-id]');
+    await expect(nodes.first()).toBeVisible({ timeout: 10000 });
+
     const nodeCount = await nodes.count();
     expect(nodeCount).toBeGreaterThan(0);
   });
