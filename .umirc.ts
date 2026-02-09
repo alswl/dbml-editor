@@ -6,6 +6,8 @@ export default defineConfig({
   model: {},
   initialState: {},
   request: {},
+  // CI/E2E 时关闭 mock，避免 path-to-regexp 版本冲突导致 dev 服务器报错
+  mock: process.env.CI ? false : undefined,
   layout: {
     title: 'dbml-editor - free online DBML editor',
     locale: false,
