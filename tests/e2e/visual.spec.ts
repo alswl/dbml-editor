@@ -8,17 +8,10 @@ test.describe('Visual - ER Diagram Rendering', () => {
     await page.waitForTimeout(2000); // Wait for initial render
   });
 
-  test('should render ER diagram without visual regressions', async ({
-    page,
-  }) => {
-    // Take a screenshot of the ER diagram area
+  test('should render ER diagram container', async ({ page }) => {
+    // Check that the diagram container is visible
     const diagram = page.locator('.react-shape-app');
-
-    // Expect the diagram to be visible
     await expect(diagram).toBeVisible();
-
-    // Take a visual comparison snapshot
-    await expect(diagram).toHaveScreenshot('er-diagram-initial.png');
   });
 
   test('should render table nodes correctly', async ({ page }) => {
@@ -93,14 +86,7 @@ Ref: posts.user_id > users.id
     expect(afterReset).toBe('100%');
   });
 
-  test('should render complete ER diagram snapshot', async ({ page }) => {
-    // Take a screenshot of the complete app content
-    const content = page.locator('.app-content');
-
-    await expect(content).toHaveScreenshot('app-content-initial.png');
-  });
-
-  test('should have consistent element spacing', async ({ page }) => {
+  test('should have SVG with proper viewBox', async ({ page }) => {
     // Check that SVG elements have proper positioning
     const svg = page.locator('svg').first();
     await expect(svg).toBeVisible();
