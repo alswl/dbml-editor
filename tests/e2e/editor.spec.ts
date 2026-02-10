@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 test.describe('DBML Editor - Basic Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should load homepage', async ({ page }) => {
@@ -42,7 +43,8 @@ test.describe('DBML Editor - Basic Features', () => {
 test.describe('DBML Editor - Editing Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should edit DBML code', async ({ page }) => {
@@ -97,7 +99,8 @@ Table orders {
 test.describe('DBML Editor - Import Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should open import dialog', async ({ page }) => {
@@ -154,7 +157,8 @@ test.describe('DBML Editor - Import Features', () => {
 test.describe('DBML Editor - Export Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should open export dialog', async ({ page }) => {
@@ -208,7 +212,8 @@ test.describe('DBML Editor - Export Features', () => {
 test.describe('DBML Editor - Error Handling', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should display syntax error message', async ({ page }) => {

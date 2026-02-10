@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 test.describe('Export - SQL Export Functionality', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
   });
 
   test('should open export modal', async ({ page }) => {

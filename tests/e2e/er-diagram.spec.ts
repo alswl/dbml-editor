@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 test.describe('ER Diagram - Interaction', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
     await page.waitForSelector('svg', { timeout: 10000 });
   });
 
@@ -21,7 +22,12 @@ test.describe('ER Diagram - Interaction', () => {
   });
 
   test('should display table names', async ({ page }) => {
-    // Wait for diagram to render table names (CI is slower)
+    // 等待 ER 图节点和文字渲染完成（layout 与 X6 渲染为异步）
+    await expect(page.locator('svg g[data-cell-id]').first()).toBeVisible({
+      timeout: 15000,
+    });
+    await expect(page.locator('svg text').first()).toBeVisible({ timeout: 15000 });
+
     const tableNames = page.locator('svg text');
     await expect(tableNames.first()).toBeVisible({ timeout: 15000 });
 
@@ -109,7 +115,8 @@ Ref: posts.user_id > users.id
 test.describe('ER Diagram - Layout', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
     await page.waitForSelector('svg', { timeout: 10000 });
   });
 
@@ -181,7 +188,8 @@ Table products {
 test.describe('ER Diagram - Visual', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
     await page.waitForSelector('svg', { timeout: 10000 });
     await page.waitForTimeout(1000);
   });
@@ -197,6 +205,7 @@ test.describe('ER Diagram - Visual', () => {
     const rectCount = await rects.count();
     expect(rectCount).toBeGreaterThan(0);
 
+    await expect(page.locator('svg text').first()).toBeVisible({ timeout: 15000 });
     const texts = page.locator('svg text');
     const textCount = await texts.count();
     expect(textCount).toBeGreaterThan(0);

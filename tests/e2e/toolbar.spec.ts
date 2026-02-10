@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 test.describe('Toolbar - Zoom Controls', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+    await expect(page.locator('.react-shape-app')).toBeVisible({ timeout: 15000 });
     await page.waitForSelector('.zoom-toolbar', { timeout: 10000 });
     await page.waitForTimeout(2000); // Wait for initial render
   });
