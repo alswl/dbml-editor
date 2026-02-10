@@ -34,3 +34,4 @@ tests/e2e/**/*.mp4
 # Playwright 浏览器缓存
 .cache/ms-playwright/
 specs
+.cursor/

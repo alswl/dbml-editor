@@ -22,14 +22,9 @@ function registerER() {
   Graph.registerPortLayout(
     'erNotePosition',
     (portsPositionArgs) => {
-      return portsPositionArgs.map((_, index) => {
-        return {
-          position: {
-            x: 0,
-            y: 0,
-          },
-        };
-      });
+      return portsPositionArgs.map(() => ({
+        position: { x: 0, y: 0 },
+      }));
     },
     true,
   );

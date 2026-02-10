@@ -7,6 +7,7 @@
     "dev": "max dev",
     "format": "prettier --cache --write .",
     "postinstall": "max setup",
+    "lint": "max lint",
     "prepare": "husky",
     "setup": "max setup",
     "start": "npm run dev",
@@ -16,6 +17,23 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:ui": "playwright test --ui",
     "test:watch": "jest --watch"
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --cache --write"
+    ],
+    "*.{js,jsx}": [
+      "max lint --fix --eslint-only",
+      "prettier --cache --write"
+    ],
+    "*.{css,less}": [
+      "max lint --fix --stylelint-only",
+      "prettier --cache --write"
+    ],
+    "*.{ts,tsx}": [
+      "max lint --fix --eslint-only",
+      "prettier --cache --write"
+    ]
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
