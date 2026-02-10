@@ -16,8 +16,9 @@ export default defineConfig({
   /* CI 环境禁用并行 */
   workers: process.env.CI ? 1 : undefined,
 
-  /* 测试报告配置 */
+  /* 测试报告配置：CI 下加 list 便于日志，同时保留 html 以生成 playwright-report 供上传 */
   reporter: [
+    ...(process.env.CI ? [['list']] : []),
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
