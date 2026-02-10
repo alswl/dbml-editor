@@ -213,3 +213,60 @@ test.describe('ER Diagram - Visual', () => {
     }
   });
 });
+
+test.describe('ER Diagram - View mode (仅表名)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('svg', { timeout: 10000 });
+  });
+
+  test('toggle table-only view and back: edges preserved, columns restored', async ({
+    page,
+  }) => {
+    await page.waitForSelector('.monaco-editor', { timeout: 10000 });
+    const editor = page.locator('.monaco-editor').first();
+    await editor.click();
+    await page.keyboard.press('Meta+A');
+    const dbmlWithRef = `
+Table users {
+  id integer [pk]
+  name varchar
+}
+
+Table posts {
+  id integer [pk]
+  user_id integer
+}
+
+Ref: posts.user_id > users.id
+`;
+    await page.keyboard.type(dbmlWithRef);
+    await page.waitForTimeout(2500);
+
+    const switchEl = page.getByTestId('er-view-mode-table-only');
+    await expect(switchEl).toBeVisible({ timeout: 5000 });
+
+    const edgesBefore = page.locator('svg path[stroke]');
+    const edgeCountBefore = await edgesBefore.count();
+    expect(edgeCountBefore).toBeGreaterThan(0);
+
+    await switchEl.click();
+    await page.waitForTimeout(800);
+
+    const edgeCountTableOnly = await page.locator('svg path[stroke]').count();
+    expect(edgeCountTableOnly).toBeGreaterThan(0);
+
+    const nodesTableOnly = page.locator('svg g[data-cell-id]');
+    expect(await nodesTableOnly.count()).toBeGreaterThanOrEqual(2);
+
+    await switchEl.click();
+    await page.waitForTimeout(800);
+
+    const edgesFull = page.locator('svg path[stroke]');
+    expect(await edgesFull.count()).toBeGreaterThan(0);
+    const textsFull = page.locator('svg text');
+    const textCountFull = await textsFull.count();
+    expect(textCountFull).toBeGreaterThan(2);
+  });
+});

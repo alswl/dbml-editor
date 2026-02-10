@@ -45,28 +45,40 @@ function parseNoteToPort(
   };
 }
 
-function parseTableToNode(table: Table, schemaName: string): any {
+export interface ParseErOptions {
+  tableOnly?: boolean;
+}
+
+function parseTableToNode(
+  table: Table,
+  schemaName: string,
+  options?: ParseErOptions,
+): any {
+  const tableOnly = options?.tableOnly === true;
   let fields: any[] = [];
-  for (let k = 0; k < table.fields.length; k++) {
-    const f = table.fields[k];
-    const field = parseFieldToPort(f, schemaName, table.name);
-    fields.push(field);
+  if (!tableOnly) {
+    for (let k = 0; k < table.fields.length; k++) {
+      const f = table.fields[k];
+      const field = parseFieldToPort(f, schemaName, table.name);
+      fields.push(field);
+    }
   }
-  if (table.note) {
+  if (table.note && !tableOnly) {
     const note = parseNoteToPort(table.note, schemaName, table.name);
     fields.push(note);
   }
+  const lineHeight = 24;
   return {
     id: `${schemaName}-${table.name}`,
     shape: 'er-rect',
     label: table.name,
     width: 150,
-    height: 24,
+    height: lineHeight,
     ports: fields,
   };
 }
 
-function parseRef(ref: Ref): any {
+function parseRef(ref: Ref, options?: ParseErOptions): any {
   if (ref.endpoints.length !== 2) {
     console.warn('ref.endpoints.length !== 2');
     return null;
@@ -78,6 +90,20 @@ function parseRef(ref: Ref): any {
   const targetFieldName = target.fieldNames[0];
   const sSchemaName = source.schemaName || 'public';
   const tSchemaName = target.schemaName || 'public';
+  const tableOnly = options?.tableOnly === true;
+
+  const sourcePoint = {
+    cell: `${sSchemaName}-${source.tableName}`,
+    ...(tableOnly
+      ? {}
+      : { port: `${sSchemaName}-${source.tableName}-${sourceFieldName}` }),
+  };
+  const targetPoint = {
+    cell: `${tSchemaName}-${target.tableName}`,
+    ...(tableOnly
+      ? {}
+      : { port: `${tSchemaName}-${target.tableName}-${targetFieldName}` }),
+  };
 
   return {
     id: ``,
@@ -90,14 +116,8 @@ function parseRef(ref: Ref): any {
         direction: 'H',
       },
     },
-    source: {
-      cell: `${sSchemaName}-${source.tableName}`,
-      port: `${sSchemaName}-${source.tableName}-${sourceFieldName}`,
-    },
-    target: {
-      cell: `${tSchemaName}-${target.tableName}`,
-      port: `${tSchemaName}-${target.tableName}-${targetFieldName}`,
-    },
+    source: sourcePoint,
+    target: targetPoint,
     labels: [
       {
         attrs: {
@@ -121,35 +141,35 @@ function parseRef(ref: Ref): any {
   };
 }
 
-function parseDatabaseToER(database: Database): any {
-  // parse nodes
-  let nodes: any[] = [];
+function parseDatabaseToER(
+  database: Database,
+  options?: ParseErOptions,
+): { nodes: any[]; edges: any[] } {
+  const tableOnly = options?.tableOnly === true;
+  const nodes: any[] = [];
   for (let i = 0; i < database.schemas.length; i++) {
     const schema = database.schemas[i];
     for (let j = 0; j < database.schemas[i].tables.length; j++) {
       const table = database.schemas[i].tables[j];
-      // handle fields
-      const node = parseTableToNode(table, schema.name);
+      const node = parseTableToNode(table, schema.name, { tableOnly });
       nodes.push(node);
     }
   }
 
-  // passe edges
-  let edges: any[] = [];
+  const edges: any[] = [];
   for (let i = 0; i < database.schemas.length; i++) {
     const schema = database.schemas[i];
     for (let j = 0; j < schema.refs.length; j++) {
       const ref = database.schemas[i].refs[j];
-      const edge = parseRef(ref);
+      const edge = parseRef(ref, { tableOnly });
       if (edge === null) {
         continue;
       }
-      console.log(edge);
       edges.push(edge);
     }
   }
 
-  return { nodes: nodes, edges: edges };
+  return { nodes, edges };
 }
 
 export default parseDatabaseToER;

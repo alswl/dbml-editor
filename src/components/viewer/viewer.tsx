@@ -1,3 +1,5 @@
+import type { ViewMode } from '@/constants/viewMode';
+import { VIEW_MODE } from '@/constants/viewMode';
 import parseDatabaseToER from '@/services/er';
 import {
   CompressOutlined,
@@ -8,11 +10,21 @@ import {
 import { DagreLayout } from '@antv/layout';
 import { Graph, Model } from '@antv/x6';
 import { Snapline } from '@antv/x6-plugin-snapline';
-import { Button, Space, Tooltip } from 'antd';
+import { Button, Space, Switch, Tooltip } from 'antd';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   database: any;
+}
+
+const VIEW_MODE_STORAGE_KEY = 'dbml-editor-er-view-mode';
+
+function loadViewModeFromStorage(): ViewMode {
+  if (typeof window === 'undefined') return VIEW_MODE.FULL;
+  const stored = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+  if (stored === VIEW_MODE.TABLE_ONLY || stored === VIEW_MODE.FULL)
+    return stored;
+  return VIEW_MODE.FULL;
 }
 
 // Viewer is a component that renders the ER diagram
@@ -23,6 +35,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
 
   const [models, setModels] = useState<Model.FromJSONData>({});
   const [zoom, setZoom] = useState<number>(1);
+  const [viewMode, setViewMode] = useState<ViewMode>(loadViewModeFromStorage);
 
   // new GridLayout({
   //   type: 'grid',
@@ -156,15 +169,35 @@ const Viewer: React.FC<Props> = (props: Props) => {
   }, [models]);
 
   useEffect(() => {
-    let m = parseDatabaseToER(props.database);
+    const tableOnly = viewMode === VIEW_MODE.TABLE_ONLY;
+    const m = parseDatabaseToER(props.database, { tableOnly });
     setModels(layout.layout(m));
-  }, [props.database]);
+  }, [props.database, viewMode]);
 
   return (
     <div className="react-shape-app">
       <div className="app-content" ref={containerRef} />
       <div className="zoom-toolbar">
         <Space direction="vertical" size="small">
+          <Tooltip title="仅表名" placement="left">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <Switch
+                size="small"
+                checked={viewMode === VIEW_MODE.TABLE_ONLY}
+                data-testid="er-view-mode-table-only"
+                onChange={(checked) => {
+                  const next = checked ? VIEW_MODE.TABLE_ONLY : VIEW_MODE.FULL;
+                  setViewMode(next);
+                  try {
+                    window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, next);
+                  } catch {
+                    // ignore
+                  }
+                }}
+              />
+              <span style={{ fontSize: 10, whiteSpace: 'nowrap' }}>仅表名</span>
+            </div>
+          </Tooltip>
           <Tooltip title="放大 (Ctrl/Cmd + 滚轮向上)" placement="left">
             <Button
               type="default"
