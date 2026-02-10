@@ -21,7 +21,10 @@ test.describe('ER Diagram - Interaction', () => {
   });
 
   test('should display table names', async ({ page }) => {
+    // Wait for diagram to render table names (CI is slower)
     const tableNames = page.locator('svg text');
+    await expect(tableNames.first()).toBeVisible({ timeout: 15000 });
+
     const textCount = await tableNames.count();
     expect(textCount).toBeGreaterThan(0);
 
