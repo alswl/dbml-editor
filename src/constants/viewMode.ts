@@ -1,5 +1,5 @@
 /**
- * ER 图视图模式：完整（表名+列）或仅表名
+ * ER diagram view mode: full (table name + columns) or table names only.
  */
 export type ViewMode = 'full' | 'tableOnly';
 

@@ -55,7 +55,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
   });
   const layout = dagreLayout;
 
-  // 缩放控制函数
+  // Zoom handlers
   const handleZoomIn = useCallback(() => {
     if (graphRef.current) {
       graphRef.current.zoom(0.1);
@@ -132,7 +132,6 @@ const Viewer: React.FC<Props> = (props: Props) => {
         }),
       );
 
-      // 监听缩放变化
       graph.on('scale', ({ sx }) => {
         setZoom(sx);
       });
@@ -140,9 +139,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
       graphRef.current = graph;
 
       graph.fromJSON(models);
-      // 使用 setTimeout 确保渲染完成后再居中
       timeoutRef.current = setTimeout(() => {
-        // 确保操作的是当前的 graph 实例
         if (graphRef.current === graph) {
           graph.zoomToFit({
             padding: 40,
@@ -155,9 +152,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
         }
       }, 0);
 
-      // 清理函数
       return () => {
-        // 清除待处理的 timeout
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
@@ -179,7 +174,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
       <div className="app-content" ref={containerRef} />
       <div className="zoom-toolbar">
         <Space direction="vertical" size="small">
-          <Tooltip title="仅表名" placement="left">
+          <Tooltip title="Table names only" placement="left">
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <Switch
                 size="small"
@@ -195,10 +190,12 @@ const Viewer: React.FC<Props> = (props: Props) => {
                   }
                 }}
               />
-              <span style={{ fontSize: 10, whiteSpace: 'nowrap' }}>仅表名</span>
+              <span style={{ fontSize: 10, whiteSpace: 'nowrap' }}>
+                Table names only
+              </span>
             </div>
           </Tooltip>
-          <Tooltip title="放大 (Ctrl/Cmd + 滚轮向上)" placement="left">
+          <Tooltip title="Zoom in (Ctrl/Cmd + scroll up)" placement="left">
             <Button
               type="default"
               icon={<PlusOutlined />}
@@ -206,7 +203,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="缩小 (Ctrl/Cmd + 滚轮向下)" placement="left">
+          <Tooltip title="Zoom out (Ctrl/Cmd + scroll down)" placement="left">
             <Button
               type="default"
               icon={<MinusOutlined />}
@@ -214,7 +211,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="适应屏幕" placement="left">
+          <Tooltip title="Fit to view" placement="left">
             <Button
               type="default"
               icon={<CompressOutlined />}
@@ -222,7 +219,7 @@ const Viewer: React.FC<Props> = (props: Props) => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="重置视图" placement="left">
+          <Tooltip title="Reset view" placement="left">
             <Button
               type="default"
               icon={<RedoOutlined />}
